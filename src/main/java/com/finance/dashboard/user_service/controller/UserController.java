@@ -19,7 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/debug-create-admin")
+    @PostMapping("/auth/debug-create-admin")
     public String createAdmin() {
 
     UserRequestDTO request = new UserRequestDTO();
@@ -31,7 +31,7 @@ public class UserController {
     userService.createUser(request);
 
     return "Admin created";
-}
+    }
 
     @PostMapping
     public UserResponseDTO createUser(@Valid @RequestBody UserRequestDTO request) {
