@@ -16,11 +16,17 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
-    @Bean
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Bean
 SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
     http
         .csrf(csrf -> csrf.disable())
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/auth/**").permitAll()
             .requestMatchers("/users/**").hasRole("ADMIN")
@@ -28,7 +34,10 @@ SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
             .requestMatchers("/dashboard/**").hasAnyRole("ADMIN", "ANALYST", "VIEWER")
             .anyRequest().authenticated()
         )
-        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); 
-    return http.build();
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+        .httpBasic(httpBasic -> httpBasic.disable())  
+        .formLogin(form -> form.disable());            
+
+        return http.build();
     }
 }
