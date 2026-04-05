@@ -30,11 +30,10 @@ public class SecurityConfig {
             .requestMatchers("/dashboard/**").hasAnyRole("ADMIN", "ANALYST", "VIEWER")
             .anyRequest().authenticated()
         )
-        .anonymous(anonymous -> anonymous.enable()) 
         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         .httpBasic(httpBasic -> httpBasic.disable())
         .formLogin(form -> form.disable());
 
-    return http.build();
+        return http.build();
     }
 }
