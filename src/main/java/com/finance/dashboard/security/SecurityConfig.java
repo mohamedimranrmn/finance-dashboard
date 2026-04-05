@@ -18,23 +18,23 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .sessionManagement(session ->
+            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        )
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/auth/**").permitAll()
+            .requestMatchers("/users/**").hasRole("ADMIN")
+            .requestMatchers("/records/**").hasAnyRole("ADMIN", "ANALYST")
+            .requestMatchers("/dashboard/**").hasAnyRole("ADMIN", "ANALYST", "VIEWER")
+            .anyRequest().authenticated()
+        )
+        .anonymous(anonymous -> anonymous.enable()) 
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+        .httpBasic(httpBasic -> httpBasic.disable())
+        .formLogin(form -> form.disable());
 
-        http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session ->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            )
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/users/**").hasRole("ADMIN")
-                .requestMatchers("/records/**").hasAnyRole("ADMIN", "ANALYST")
-                .requestMatchers("/dashboard/**").hasAnyRole("ADMIN", "ANALYST", "VIEWER")
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .httpBasic(httpBasic -> httpBasic.disable())
-            .formLogin(form -> form.disable());
-
-        return http.build();
+    return http.build();
     }
 }
