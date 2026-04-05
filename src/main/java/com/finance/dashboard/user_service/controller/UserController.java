@@ -5,6 +5,7 @@ import com.finance.dashboard.user_service.dto.UserResponseDTO;
 import com.finance.dashboard.user_service.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import com.finance.dashboard.user_service.entity.Role;
 
 import java.util.List;
 
@@ -21,16 +22,16 @@ public class UserController {
     @PostMapping("/debug-create-admin")
     public String createAdmin() {
 
-        UserRequestDTO request = new UserRequestDTO();
-        request.setName("Admin");
-        request.setEmail("admin@test.com");
-        request.setPassword("admin123");
-        request.setRole("ADMIN"); 
+    UserRequestDTO request = new UserRequestDTO();
+    request.setName("Admin");
+    request.setEmail("admin@test.com");
+    request.setPassword("admin123");
+    request.setRole(Role.ADMIN);
 
-        userService.createUser(request);
+    userService.createUser(request);
 
-        return "Admin created";
-    }
+    return "Admin created";
+}
 
     @PostMapping
     public UserResponseDTO createUser(@Valid @RequestBody UserRequestDTO request) {
