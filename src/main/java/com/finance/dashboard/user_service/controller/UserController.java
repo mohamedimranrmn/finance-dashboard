@@ -10,7 +10,7 @@ import com.finance.dashboard.user_service.entity.Role;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/auth")
 public class UserController {
 
     private final UserService userService;
@@ -19,7 +19,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping("/auth/debug-create-admin")
+    @PostMapping("/debug-create-admin")
     public String createAdmin() {
 
     UserRequestDTO request = new UserRequestDTO();
