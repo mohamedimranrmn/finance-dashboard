@@ -18,6 +18,19 @@ public class UserController {
         this.userService = userService;
     }
 
+    @PostMapping("/debug-create-admin")
+    public String createAdmin() {
+    User user = new User();
+    user.setName("Admin");
+    user.setEmail("admin@test.com");
+    user.setPassword(passwordEncoder.encode("admin123"));
+    user.setRole(Role.ADMIN);
+
+    userRepository.save(user);
+
+    return "Created";
+}
+
     @PostMapping
     public UserResponseDTO createUser(@Valid @RequestBody UserRequestDTO request) {
         return userService.createUser(request);
